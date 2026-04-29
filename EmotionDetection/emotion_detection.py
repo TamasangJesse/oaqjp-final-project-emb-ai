@@ -1,7 +1,7 @@
 """Emotion Detection module using Watson NLP Embedded AI Library."""
 
-import requests
 import json
+import requests
 
 
 def emotion_detector(text_to_analyse):

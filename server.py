@@ -1,4 +1,4 @@
-"""Flask server for the Emotion Detection web application."""
+"""Flask web application for Emotion Detection using Watson NLP."""
 
 from flask import Flask, render_template, request
 from EmotionDetection.emotion_detection import emotion_detector
@@ -7,26 +7,21 @@ app = Flask("EmotionDetection")
 
 
 @app.route("/emotionDetector")
-def sent_detector():
-    """Handle emotion detection requests."""
-    text_to_analyse = request.args.get("textToAnalyse")
-    response = emotion_detector(text_to_analyse)
+def emotion_detector_route():
+    """Analyze the emotion of the given text and return the result."""
+    text_to_analyse = request.args.get("textToAnalyse", "")
 
-    if response["dominant_emotion"] is None:
-        return "Invalid text! Please try again."
+    result = emotion_detector(text_to_analyse)
 
-    anger = response["anger"]
-    disgust = response["disgust"]
-    fear = response["fear"]
-    joy = response["joy"]
-    sadness = response["sadness"]
-    dominant_emotion = response["dominant_emotion"]
+    if result["dominant_emotion"] is None:
+        return "Invalid text! Please try again!"
 
     return (
         f"For the given statement, the system response is "
-        f"'anger': {anger}, 'disgust': {disgust}, 'fear': {fear}, "
-        f"'joy': {joy} and 'sadness': {sadness}. "
-        f"The dominant emotion is {dominant_emotion}."
+        f"'anger': {result['anger']}, 'disgust': {result['disgust']}, "
+        f"'fear': {result['fear']}, 'joy': {result['joy']} and "
+        f"'sadness': {result['sadness']}. The dominant emotion is "
+        f"{result['dominant_emotion']}."
     )
 
 
